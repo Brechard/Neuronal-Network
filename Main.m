@@ -9,7 +9,6 @@ X=[[1 0 0 0 0 0 0 0]
     [0 0 0 0 0 1 0 0]
     [0 0 0 0 0 0 1 0]
     [0 0 0 0 0 0 0 1]];
-%123
 
 Y = X;
 output = X;
@@ -39,6 +38,9 @@ D_b_2 = zeros(nodes_out_3, 1);
 
 c = 0;
 delta_3 = 1;
+
+tic;
+
 while max(abs(delta_3)) > 0.05
     D_W_1 = zeros(nodes_hid_2, nodes_in_1);
     D_b_1 = zeros(nodes_hid_2, 1);
@@ -90,4 +92,7 @@ while max(abs(delta_3)) > 0.05
     W_2 = W_2 - alpha * ((D_W_2 / n_samples) + lambda * W_2);
     b_2 = b_2 - alpha * ((D_b_2 / n_samples));
 end
+
+time = toc
+
 plot(errors);
