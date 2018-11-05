@@ -1,13 +1,16 @@
 clear, clc
 %sigmoid
 
-X=[[1 0 0 0 0 0 0 0]
+X=[ [1 0 0 0 0 0 0 0]
     [0 1 0 0 0 0 0 0]
     [0 0 1 0 0 0 0 0]
     [0 0 0 1 0 0 0 0]
     [0 0 0 0 1 0 0 0]
     [0 0 0 0 0 1 0 0]
     [0 0 0 0 0 0 1 0]
+    [0 0 0 0 0 1 0 1]
+    [0 0 0 1 0 0 0 1]
+    [0 1 1 0 1 0 0 1]
     [0 0 0 0 0 0 0 1]];
 
 Y = X;
@@ -17,13 +20,13 @@ output = X;
 [n_nodes_in, n_samples] = size(X);
 
 % Number of nodes in each layer
-nodes_in_1 = 8;
+nodes_in_1 = n_nodes_in;
 nodes_hid_2 = 3;
-nodes_out_3 = 8;
+nodes_out_3 = n_nodes_in;
 
 alpha = 0.8;
 lambda = 0.0001;
-std_dev = 0.1;
+std_dev = 0.01;
 
 W_1 = normrnd(0, std_dev, nodes_hid_2, nodes_in_1);
 b_1 = normrnd(0, std_dev, nodes_hid_2, 1);
@@ -38,17 +41,18 @@ D_W_2 = zeros(nodes_out_3, nodes_hid_2);
 D_b_2 = zeros(nodes_out_3, 1);
 
 c = 0;
-delta_3 = 1;
+maxError = 1;
 
 tic;
 
-while max(abs(delta_3)) > 0.04
+while max(abs(maxError)) > 0.04
     D_W_1 = zeros(nodes_hid_2, nodes_in_1);
     D_b_1 = zeros(nodes_hid_2, 1);
 
     D_W_2 = zeros(nodes_out_3, nodes_hid_2);
     D_b_2 = zeros(nodes_out_3, 1);
     output = X;
+    maxError = 0;
     for sample = 1:n_samples
         c = c + 1;
 % Perform the backpropagation algorithm
@@ -82,7 +86,9 @@ while max(abs(delta_3)) > 0.04
         
         D_W_2 = D_W_2 + J_W_2;
         D_b_2 = D_b_2 + J_b_2;
-
+        if(max(abs(delta_3)) > maxError)
+            maxError = max(abs(delta_3));
+        end
         errors(c) = max(delta_3);
 
     end
