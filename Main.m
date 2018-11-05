@@ -8,9 +8,6 @@ X=[ [1 0 0 0 0 0 0 0]
     [0 0 0 0 1 0 0 0]
     [0 0 0 0 0 1 0 0]
     [0 0 0 0 0 0 1 0]
-    [0 0 0 0 0 1 0 1]
-    [0 0 0 1 0 0 0 1]
-    [0 1 1 0 1 0 0 1]
     [0 0 0 0 0 0 0 1]];
 
 Y = X;
@@ -44,8 +41,9 @@ c = 0;
 maxError = 1;
 
 tic;
-
-while max(abs(maxError)) > 0.04
+i = 0;
+while abs(maxError) > 0.04
+    i = i + 1;
     D_W_1 = zeros(nodes_hid_2, nodes_in_1);
     D_b_1 = zeros(nodes_hid_2, 1);
 
@@ -86,12 +84,26 @@ while max(abs(maxError)) > 0.04
         
         D_W_2 = D_W_2 + J_W_2;
         D_b_2 = D_b_2 + J_b_2;
+        
         if(max(abs(delta_3)) > maxError)
             maxError = max(abs(delta_3));
         end
         errors(c) = max(delta_3);
-
     end
+    
+    % Code to print the weights, only works for assignment dimensions
+%     for j = 0:7
+%         w_1_values(i,1 + 3* j) = (W_1(1, j + 1));
+%         w_1_values(i,2 + 3* j) = (W_1(2, j + 1));
+%         w_1_values(i,3 + 3* j) = (W_1(3, j + 1));            
+%     end
+%     for k = 0:7
+%         w_2_values(i,1 + 8* k) = (W_2(k + 1, 1));
+%         w_2_values(i,2 + 8* k) = (W_2(k + 1, 2));
+%         w_2_values(i,3 + 8* k) = (W_2(k + 1, 3));
+%     end
+
+
 % Update the parameters
     W_1 = W_1 - alpha * ((D_W_1 / n_samples) + lambda * W_1);
     b_1 = b_1 - alpha * ((D_b_1 / n_samples));
@@ -101,5 +113,10 @@ while max(abs(maxError)) > 0.04
 end
 
 time = toc;
-
+% subplot(211);
+% plot(w_1_values)
+% title("Weights of layer 1");
+% subplot(212);
+% plot(w_2_values)
+% title("Weights of layer 2");
 plot(errors);
