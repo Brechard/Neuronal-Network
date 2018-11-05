@@ -21,14 +21,15 @@ nodes_in_1 = 8;
 nodes_hid_2 = 3;
 nodes_out_3 = 8;
 
-alpha = 0.9;
+alpha = 0.8;
 lambda = 0.0001;
+std_dev = 0.1;
 
-W_1 = normrnd(0, 0.01, nodes_hid_2, nodes_in_1);
-b_1 = normrnd(0, 0.01, nodes_hid_2, 1);
+W_1 = normrnd(0, std_dev, nodes_hid_2, nodes_in_1);
+b_1 = normrnd(0, std_dev, nodes_hid_2, 1);
 
-W_2 = normrnd(0, 0.01, nodes_out_3, nodes_hid_2);
-b_2 = normrnd(0, 0.01, nodes_out_3, 1);
+W_2 = normrnd(0, std_dev, nodes_out_3, nodes_hid_2);
+b_2 = normrnd(0, std_dev, nodes_out_3, 1);
 
 D_W_1 = zeros(nodes_hid_2, nodes_in_1);
 D_b_1 = zeros(nodes_hid_2, 1);
@@ -41,7 +42,7 @@ delta_3 = 1;
 
 tic;
 
-while max(abs(delta_3)) > 0.05
+while max(abs(delta_3)) > 0.04
     D_W_1 = zeros(nodes_hid_2, nodes_in_1);
     D_b_1 = zeros(nodes_hid_2, 1);
 
@@ -93,6 +94,6 @@ while max(abs(delta_3)) > 0.05
     b_2 = b_2 - alpha * ((D_b_2 / n_samples));
 end
 
-time = toc
+time = toc;
 
 plot(errors);
